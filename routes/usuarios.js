@@ -1,16 +1,29 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { usuariosGet, usuariosPut, usuariosPost, usuariosPatch, usuariosDelete } from "../controllers/usuarios.js";
-import { emailExiste, esRoleValido, existeUsuarioPorId } from "../helpers/db-validators.js";
-import { validarCampos } from "../middlewares/validar-campos.js";
+
+import { usuariosGet,
+         usuariosPut,
+         usuariosPost,
+         usuariosPatch,
+        usuariosDelete } from "../controllers/usuarios.js";
+
+import { emailExiste,
+         esRoleValido,
+         existeUsuarioPorId } from "../helpers/db-validators.js";
+
+// import { validarCampos } from "../middlewares/validar-campos.js";
+// import { validarJWT } from "../middlewares/validar-jwt.js";
+// import { esAdminRole, tieneRole } from "../middlewares/validar-roles.js";
+
+import { validarCampos, validarJWT, esAdminRole, tieneRole} from "../middlewares/index.js";
  
 
 
-const router = Router();
+const routerUsuarios = Router();
 
-router.get('/', usuariosGet ) 
+routerUsuarios.get('/', usuariosGet ) 
 
-router.post('/',[
+routerUsuarios.post('/',[
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('email', 'El correo no es valido').isEmail(),
     check('email').custom( emailExiste ),
@@ -24,18 +37,21 @@ router.post('/',[
 
 ], usuariosPost)
 
-router.put('/:id',[
+routerUsuarios.put('/:id',[
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     check('role').custom( esRoleValido ),
     validarCampos
 ], usuariosPut)
 
-router.patch('/',[
+routerUsuarios.patch('/',[
    
 ], usuariosPatch)
 
-router.delete('/:id',[
+routerUsuarios.delete('/:id',[
+    validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE', 'OTRO_ROLE'),
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
@@ -43,4 +59,4 @@ router.delete('/:id',[
 
 
 
-export { router }
+export { routerUsuarios }
