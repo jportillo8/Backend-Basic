@@ -55,7 +55,7 @@ const usuariosPut = async (req, res) => {
     const salt = bcryptjs.genSaltSync();
     resto.password = bcryptjs.hashSync(password, salt);
   }
-
+  // findByIdAndUpdate - Actualiza el registro y lo retorna
   const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
   res.json({

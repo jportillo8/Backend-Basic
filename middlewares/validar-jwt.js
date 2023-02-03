@@ -6,7 +6,7 @@ import { Usuario } from '../models/usuarios.js';
 const validarJWT = async (req, res = response, next) => {
     
     const token = req.header('x-token')
-    console.log(token)
+    // console.log(token)
     if(!token){
         return res.status(401).json({
             msg: 'No hay token en la peticion'
@@ -33,8 +33,9 @@ const validarJWT = async (req, res = response, next) => {
             })
         }
 
-
+        // Retornar el usuario encontrado en la DB
        req.usuario = usuario
+    //    console.log(`desde validarJWT: ${req.usuario}`)
         
         next()
     } catch (error) {
