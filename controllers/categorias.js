@@ -1,5 +1,5 @@
 import { response } from "express";
-import { Categoria } from "../models/categoria.js";
+import { Categoria } from "../models/index.js";
 
 // obtenerCategorias - paginado - total - populate
 const obtenerCategorias = async (req, res = response) => {

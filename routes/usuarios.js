@@ -4,8 +4,7 @@ import { check } from "express-validator";
 import { usuariosGet,
          usuariosPut,
          usuariosPost,
-         usuariosPatch,
-        usuariosDelete } from "../controllers/usuarios.js";
+         usuariosDelete } from "../controllers/usuarios.js";
 
 import { emailExiste,
          esRoleValido,
@@ -44,9 +43,6 @@ routerUsuarios.put('/:id',[
     validarCampos
 ], usuariosPut)
 
-routerUsuarios.patch('/',[
-   
-], usuariosPatch)
 
 routerUsuarios.delete('/:id',[
     validarJWT,

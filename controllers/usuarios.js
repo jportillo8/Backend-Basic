@@ -1,7 +1,7 @@
 import { response, request } from "express";
 import bcryptjs from "bcryptjs";
 
-import { Usuario } from "../models/usuarios.js";
+import { Usuario } from "../models/index.js";
 
 const usuariosGet = async (req = request, res = response) => {
   const { limite = 5, desde = 0 } = req.query;
@@ -38,12 +38,8 @@ const usuariosPost = async (req, res) => {
   // Save the user in the database
   await usuario.save();
 
-  res.json({
-    ok: true,
-    msg: "post API- controlador",
-    usuario,
-  });
-};
+  res.json(usuario)
+}
 
 const usuariosPut = async (req, res) => {
   const { id } = req.params;
@@ -59,16 +55,7 @@ const usuariosPut = async (req, res) => {
   const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
   res.json({
-    ok: true,
-    msg: "put API- controlador",
-    usuario,
-  });
-};
-
-const usuariosPatch = (req, res) => {
-  res.json({
-    ok: true,
-    msg: "patch API- controlador",
+    usuario
   });
 };
 
@@ -90,6 +77,5 @@ export {
   usuariosGet,
   usuariosPut,
   usuariosPost,
-  usuariosPatch,
   usuariosDelete,
 };

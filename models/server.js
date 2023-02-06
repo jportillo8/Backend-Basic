@@ -1,9 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+
+import { dbConnection } from '../database/config.js'
 import { routerUsuarios  } from '../routes/usuarios.js'
 import { routerAuth  } from '../routes/auth.js'
-import { dbConnection } from '../database/config.js'
 import { routerCategorias } from '../routes/categorias.js'
+import { routerProductos } from '../routes/productos.js'
+import { routerBuscar } from '../routes/buscar.js'
 
 class Server{
     constructor() {
@@ -12,8 +15,10 @@ class Server{
 
         this.paths = {
             auth: '/api/auth',
+            buscar: '/api/buscar',
             usuarios: '/api/usuarios',
-            categorias: '/api/categorias'
+            categorias: '/api/categorias',
+            productos: '/api/productos',
         }
         // this.usuariosPath = '/api/usuarios'
 
@@ -53,8 +58,10 @@ class Server{
     // Metodo para las rutas
     routes() {
         this.app.use(this.paths.auth,  routerAuth )
-        this.app.use(this.paths.usuarios,  routerUsuarios )
+        this.app.use(this.paths.buscar,  routerBuscar )
         this.app.use(this.paths.categorias,  routerCategorias )
+        this.app.use(this.paths.productos,  routerProductos )
+        this.app.use(this.paths.usuarios,  routerUsuarios )
     }
 
     listen(){
@@ -63,4 +70,5 @@ class Server{
           })
     }
 }
+
 export { Server } 
