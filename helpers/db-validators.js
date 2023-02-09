@@ -37,7 +37,15 @@ const existeProductoPorId = async (id) => {
   // console.log(existeCategoria);
 if (!existeProducto) {
   throw new Error(`Este ${id} de producto no existe`);
+ }
 }
-};
+// Validar colecciones permitidas
+const coleccionesPermitidas = ( coleccion = '' , colecciones = []) => {
+  const incluida = colecciones.includes( coleccion );
+  if ( !incluida ) {
+    throw new Error( `La coleccion ${ coleccion } no es permitida - ${ colecciones }` );
+  }
+  return true;
+}
 
-export { esRoleValido, emailExiste, existeUsuarioPorId, existeCategoriaPorId, existeProductoPorId };
+export { esRoleValido, emailExiste, existeUsuarioPorId, existeCategoriaPorId, existeProductoPorId, coleccionesPermitidas };

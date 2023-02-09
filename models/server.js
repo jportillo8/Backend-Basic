@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import fileUpload from 'express-fileupload'
 
 import { dbConnection } from '../database/config.js'
 import { routerUsuarios  } from '../routes/usuarios.js'
@@ -7,6 +8,7 @@ import { routerAuth  } from '../routes/auth.js'
 import { routerCategorias } from '../routes/categorias.js'
 import { routerProductos } from '../routes/productos.js'
 import { routerBuscar } from '../routes/buscar.js'
+import { routerUploads } from '../routes/uploads.js'
 
 class Server{
     constructor() {
@@ -19,6 +21,8 @@ class Server{
             usuarios: '/api/usuarios',
             categorias: '/api/categorias',
             productos: '/api/productos',
+            uploads: '/api/uploads'
+
         }
         // this.usuariosPath = '/api/usuarios'
 
@@ -35,7 +39,7 @@ class Server{
         this.middlewares()
 
         // Rutas de mi aplicacion
-        this.routes()
+        this.routes()        
 
     }
 
@@ -53,6 +57,13 @@ class Server{
 
         // Directorio publico
         this.app.use(express.static('public'))
+
+        // FileUpload - Carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }))
     }
 
     // Metodo para las rutas
@@ -62,6 +73,7 @@ class Server{
         this.app.use(this.paths.categorias,  routerCategorias )
         this.app.use(this.paths.productos,  routerProductos )
         this.app.use(this.paths.usuarios,  routerUsuarios )
+        this.app.use(this.paths.uploads,  routerUploads )
     }
 
     listen(){
