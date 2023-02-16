@@ -10,10 +10,19 @@ import { routerProductos } from '../routes/productos.js'
 import { routerBuscar } from '../routes/buscar.js'
 import { routerUploads } from '../routes/uploads.js'
 
+// WebSockets
+import { Server as ServerIo  } from 'socket.io'
+import { createServer } from 'http'
+import { socketController } from '../sockets/socketController.js'
+
 class Server{
     constructor() {
         this.app = express()
         this.port = process.env.PORT
+
+        // Crear el servidor de express y el de websockets
+        this.serverIo = createServer(this.app)
+        this.io = new ServerIo(this.serverIo)
 
         this.paths = {
             auth: '/api/auth',
@@ -24,14 +33,6 @@ class Server{
             uploads: '/api/uploads'
 
         }
-        // this.usuariosPath = '/api/usuarios'
-
-        // Autenciacion
-        // this.authPath = '/api/auth'
-
-        // Categorias
-        // this.categoriasPath = '/api/categorias'
-
         // Conectar a base de datos
         this.conectarDB()
 
@@ -39,7 +40,11 @@ class Server{
         this.middlewares()
 
         // Rutas de mi aplicacion
-        this.routes()        
+        this.routes()
+        
+        // Sockets - Configuracion de los sockets
+        this.sockets()
+
 
     }
 
@@ -76,8 +81,13 @@ class Server{
         this.app.use(this.paths.uploads,  routerUploads )
     }
 
+    // Metodo para configurar los sockets
+    sockets() {
+        this.io.on('connection', socketController)
+    }
+
     listen(){
-        this.app.listen(this.port, () => {
+        this.serverIo.listen(this.port, () => {
             console.log(`App listening on port ${this.port}`)
           })
     }
