@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
+import {Usuario} from '../models/usuarios.js'
 
 const generarJWT = (uid = '') => {
 
@@ -22,4 +23,31 @@ const generarJWT = (uid = '') => {
     
 }
 
-export { generarJWT }
+const comprobarJWT = async(token = '') => {
+    
+        try {
+
+            if (token.length < 10) {
+                return null
+            }
+            const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY)
+            const usuario = await Usuario.findById(uid)
+
+            if (usuario) {
+                if (usuario.estado) {
+                    return usuario
+                }else{
+                    return null
+                }
+                return usuario
+            }else {
+                return null
+            }
+            
+        } catch (error) {
+            return null
+        }
+        
+}
+
+export { generarJWT, comprobarJWT  }

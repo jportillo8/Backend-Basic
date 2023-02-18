@@ -82,8 +82,9 @@ class Server{
     }
 
     // Metodo para configurar los sockets
+    // Configuracion de los sockets para enviar io a todos los controladores
     sockets() {
-        this.io.on('connection', socketController)
+        this.io.on('connection', (socket) =>  socketController(socket, this.io)  )
     }
 
     listen(){
